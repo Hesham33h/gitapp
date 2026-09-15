@@ -1,0 +1,29 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/webserver
+- name: update service
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: install_service
+  ansible.builtin.apt: 
+    name: "{{webserver_package}}" 
+    state: present
+
+
+- name: enable service
+  ansible.builtin.service:
+    name: "{{webserver_serves}}"
+    enabled: true
+    
+
+
+
+- name:  copy index 
+  copy:
+    src: "{{webcode}}"
+    dest: "{{path_link}}/{{webcode}}"
+    owner: root
+    group: root
+    mode: '644'
+  notify: restart nginx
